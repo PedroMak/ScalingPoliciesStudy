@@ -21,3 +21,13 @@
     - Enable DNS hostnames ✅
     - Enable DNS resolution ✅
 * Clique em `Create VPC`.
+
+## 🔐 Criação do Security Group:
+
+### Navegue no console da AWS até `EC2` e no painel localizado na esquerda selecione `Security Groups`, clique em `Create Security Group`:
+
+* Como o propósito é testar as políticas de escalonamento, podemos criar um `Security Group` genérico com as seguintes `Inbound Rules`:
+
+    | Type  | Protocol | Port Range | Source Type |  Source   |
+    | ----- | -------- | ---------- | ----------- | --------- |
+    | HTTP  |   TCP    |    80      |  Anywhere   | 0.0.0.0/0 |
