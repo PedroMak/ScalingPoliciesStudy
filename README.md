@@ -50,3 +50,44 @@
 
 > [!NOTE]
 > A instâncias alvo serão definidas posteriormente durante a criação do `Auto Scalling Group`.
+
+## 📈 Criação do Auto Scalling Group (ASG):
+
+### Retorne à página da `EC2` e, no menu lateral esquerdo, selecione `Auto Scalling Groups` e clique em `Create Auto Scalling Group`:
+
+* Nesta primeira etapa, dê um nome para seu `Auto Scalling Group`;
+* Em `Launch Template` selecione a opção para criar um novo (será aberto em uma aba nova);
+
+#### Criação do Launch Template:
+
+* Aqui basicamente será feita a configuração de nossas EC2s;
+* Dê um nome e uma versão para seu `Launch Template`;
+* Em `Launch template contents`, para o Sistema Operacional, clique em `Quick start` e selecione `Amazon Linux` (por default virá a versão 2023 que é gratuita);
+* Em `Instance type` selecione a `t2.micro`;
+* Para `Key pair` pode manter a opção `Don't include in launch template`;
+* Em `Network settings` não há necessidade de seleções no momento, a escolha de `subnet` e `Security group` pode ser feita posteriormente durante a criação do `Auto Scalling Group`, mas caso queira, pode-se selecionar logo o `Security Group`;
+* Em `Storage` pode-se manter o default;
+* Clique para expandir a aba de `Advanced details`, desça até o final da página, localize o campo para inserção do `User data` e insira os comandos desejados;
+
+> [!NOTE]
+> User data utilizado [aqui](https://github.com/PedroMak/ScallingPoliciesStudy/blob/master/userdata.sh).
+
+* Clique em `Create launch template`.
+
+#### De volta à criação do Auto Scalling Group:
+
+* Com o nome já definido, selecione o `Launch Template` que foi criado e clique em `Next`;
+* Na segunda etapa, em `Network`, selecione sua VPC, as duas subnets públicas e pode manter `Balanced best effort`. Clique em `Next`;
+* Para a terceira etapa, siga as seguintes configurações:
+  * Selecione `Attach to an existing load balancer` em `Load balancing`;
+  * Selecione `Choose from Classic Load Balancers` e escolha o `Classic Load Balancer` que foi criado;
+  * Para `VPC Lattice integration options` pode manter `No VPC Lattice service`;
+   * Em `Health Checks` marque o checkbox de `Turn on Elastic Load Balancing health checks` conforme a imagem:
+   ![healthcheck-config](./images/ELB-healthcheck-config.png)
+* Na quarta etapa definimos as seguintes condigurações:
+  * `Desired capacity`: 2;
+  * `Min desired capacity`: 1;
+  * `Max desired capacity`: 4;
+  * Em `Automatic scalling` podemos manter `No scaling policies`;
+  * As configurações restantes podem ser mantidas como default, então clique em `Next`;
+* A quinta e sexta etapas são opcionais, clique em `Next` nas duas e então clicue em `Create Auto Scalling Group`;
