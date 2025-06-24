@@ -49,7 +49,7 @@
 * As configurações restantes podem ser mantidas as `default`.
 
 > [!NOTE]
-> A instâncias alvo serão definidas posteriormente durante a criação do `Auto Scaling Group`.
+> Os alvos serão definidas posteriormente durante a criação do `Auto Scaling Group`.
 
 ## 📈 Criação do Auto Scaling Group (ASG):
 
@@ -85,9 +85,9 @@
    * Em `Health Checks` marque o checkbox de `Turn on Elastic Load Balancing health checks` conforme a imagem:
    ![healthcheck-config](./images/ELB-healthcheck-config.png)
 * Na quarta etapa definimos as seguintes condigurações:
-  * `Desired capacity`: 2;
+  * `Desired capacity`: 1;
   * `Min desired capacity`: 1;
-  * `Max desired capacity`: 4;
+  * `Max desired capacity`: 3;
   * Em `Automatic scaling` podemos manter `No scaling policies`;
   * As configurações restantes podem ser mantidas como default, então clique em `Next`;
 * A quinta e sexta etapas são opcionais, clique em `Next` nas duas e então clique em `Create Auto Scaling Group`;
@@ -132,3 +132,30 @@
   * Em `Select a group` selecione seu `Auto Scaling Group`;
   * Em `Take the following action...` selecione `ScaleIn (Remove 2 instances)`;
 * Etapas e configurações restantes podem ser feitas da mesma maneira.
+
+## ☑️ Testes e Validações:
+
+* Após criar o `Auto Scaling Group` as instâncias `EC2` serão lançadas automaticamente e, após terminarem de iniciar, podemos acessar nosso conteúdo via DNS do `Load Balancer`:<br/>
+![hello-world](./images/hello-world.png)
+
+* Podemos conferir também que há apenas uma instância rodando:
+![running-instance](./images/running-instance.png)
+
+#### Simulando requisições:
+
+* Para simular requisições iremos utilizar o [ApacheBench](https://httpd.apache.org/docs/2.4/programs/ab.html).
+* Em meu subsystem Linux eu rodei o seguinte comando: `while true; do ab -n 3000 -c 50 <http://dns_do_load_balancer/>; sleep 10; done`, onde:
+  * `-n` indica o número de requisições que serão feitas (no caso 3000);
+  * `-c` indica a realização de múltiplas requisições ao mesmo tempo (no caso 50 requisições simultâneas);
+  * `while true` indica que o comando ficará sendo executado sem parar até que sua execução seja interrompida manualmente.
+* Após rodar o comando podemos ver que foram lançadas novas instâncias:
+![running-instances](./images/running-instances.png)
+* Pode-se observar também que nosso alarme de `Scale Out` passou para o estado de `In Alarm`:
+![scaleOut-InAlarm](./images/scaleOut-InAlarm.png)
+* Após um tempo sem realizar requisições o alarme de `Scale In` entra em estado de `In alarm`:
+![scaleIn-InAlarm](./images/scaleIn-InAlarm.png)
+* E o número de instâncias foi reduzido:
+![running-instace-after-scaleIn](./images/running-instance-after-scaleIn.png)
+#
+### Com isso finalizamos o projeto! 🥳 <br/>
+### Obrigado! 😎
