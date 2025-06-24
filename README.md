@@ -31,3 +31,22 @@
     | Type  | Protocol | Port Range | Source Type |  Source   |
     | ----- | -------- | ---------- | ----------- | --------- |
     | HTTP  |   TCP    |    80      |  Anywhere   | 0.0.0.0/0 |
+
+## 🚥 Criação do Load Balancer:
+
+### Retorne à página da `EC2` e, no menu lateral esquerdo, selecione `Load Balancers` e então clique em `Create load balancer`:
+
+* Serão apresentadas 3 opções principais de `Load Balancer` e uma opção legado, o `Classic Load Balancer`, clique nele para expandir:
+![createLoadBalancer](./images/createLoadBalancer.png)
+* Em seguida clique em `Create`:
+![createCLB](./images/createCLB.png)
+* Em `Basic configuration` replique o que seguinte:
+  * Defina um nome;
+  * Em `Scheme` selecione `Internet-facing`;
+* Em `Network mapping` selecione sua VPC, marque a checkbox de ambas `AZs` e selecione a subnet pública de cada:
+![clb-network-config](./images/clb-network-config.png)
+* Em `Security Groups` remova o default e adicione o genérico que foi criado;
+* As configurações restantes podem ser mantidas as `default`.
+
+> [!NOTE]
+> A instâncias alvo serão definidas posteriormente durante a criação do `Auto Scalling Group`.
